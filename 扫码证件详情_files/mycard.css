@@ -1,0 +1,559 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: "Microsoft Yahei", sans-serif;
+    background-color: RGBA(2, 103, 255, 1);
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+}
+
+a {
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    color: #000000;
+    background-color: transparent;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+}
+
+ul,
+li {
+    text-decoration: none;
+    list-style: none;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.hide {
+    display: none;
+}
+
+@font-face {
+    font-family: "Blenda-Script-1";
+    src: url("../../fonts/Blenda-Script-1.woff2") format("woff2"), url("../../fonts/Blenda-Script-1.woff") format("woff"), url("../../fonts/Blenda-Script-1.ttf") format("truetype"), url("../../fonts/Blenda-Script-1.eot") format("embedded-opentype"), url("../../fonts/Blenda-Script-1.svg") format("svg"), url("../../fonts/Blenda-Script-1.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SourceHanSansCN-Medium";
+    src: url("../../fonts/SourceHanSansCN-Medium.woff2") format("woff2"), url("../../fonts/SourceHanSansCN-Medium.woff") format("woff"), url("../../fonts/SourceHanSansCN-Medium.ttf") format("truetype"), url("../../fonts/SourceHanSansCN-Medium.eot") format("embedded-opentype"), url("../../fonts/SourceHanSansCN-Medium.svg") format("svg"), url("../../fonts/SourceHanSansCN-Medium.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SourceHanSansCN-Regular";
+    src: url("../../fonts/SourceHanSansCN-Regular.woff2") format("woff2"), url("../../fonts/SourceHanSansCN-Regular.woff") format("woff"), url("../../fonts/SourceHanSansCN-Regular.ttf") format("truetype"), url("../../fonts/SourceHanSansCN-Regular.eot") format("embedded-opentype"), url("../../fonts/SourceHanSansCN-Regular.svg") format("svg"), url("../../fonts/SourceHanSansCN-Regular.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "SourceHanSansCN-Bold";
+    src: url("../../fonts/SourceHanSansCN-Bold.woff2") format("woff2"), url("../../fonts/SourceHanSansCN-Bold.woff") format("woff"), url("../../fonts/SourceHanSansCN-Bold.ttf") format("truetype"), url("../../fonts/SourceHanSansCN-Bold.eot") format("embedded-opentype"), url("../../fonts/SourceHanSansCN-Bold.svg") format("svg"), url("../../fonts/SourceHanSansCN-Bold.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-color: rgba(245, 247, 251, 1);
+}
+
+.mycardpanel {
+    /*height: 6.6rem;*/
+    /*min-height: 7.1rem;*/
+    background: #FFFFFF;
+    box-shadow: 0px 10px 20px 0px rgba(158, 158, 158, 0.3);
+    border-radius: 0.28rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.17rem;
+}
+
+.danwei_1 {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+.danwei_2 {
+    /*width: 3.9rem;*/
+    flex-shrink: 0;
+    flex: 1;
+    /*height: 0.34rem;*/
+    display: inline-block;
+    line-height: 1.5;
+    /*background-color: red;*/
+    word-break: break-all;
+}
+
+.top {
+    position: relative;
+    height: 1.12rem;
+    line-height: 1.12rem;
+    background: #0267FF;
+    border-radius: 0.28rem 0.28rem 0px 0px;
+    text-align: center;
+    /*font-size: 0.42rem;*/
+    font-size: 0.4rem;
+    /*font-family: "SourceHanSansCN-Bold";*/
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.contain {
+    /*padding: 0.5rem 0.6rem 0.5rem 0.6rem;*/
+    /*padding: 0.5rem 0.5rem 0.7rem 0.5rem;*/
+    /*padding: 0.25rem 0.42rem 0.32rem 0.42rem;*/
+    padding: 0.3rem 0.32rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.mycardpanel .container{
+    padding: 0.3rem 0.32rem;
+}
+.flewx_1{
+    flex: 1;
+}
+.width77{
+    width: 77%;
+}
+.left {
+    flex-shrink: 0;
+    float: left;
+    /*width: 77%;*/
+    width: 81%;
+    /*flex: 1;*/
+    font-weight: 400;
+    color: #000000;
+    /*font-size: 0.34rem;*/
+    font-size: 0.29rem;
+    font-family: "SourceHanSansCN-Regular";
+    /*background-color: red;*/
+}
+
+.left p {
+    /*height: 0.34rem;*/
+    /*line-height: 0.34rem;*/
+    line-height: 0.36rem;
+    /*margin-bottom: 0.28rem;*/
+    margin-bottom: 0.2rem;
+}
+
+.left p:nth-last-child(1) {
+    margin-bottom: 0;
+}
+
+.left p:nth-child(1),
+.left p:nth-child(2) {
+    /*margin-bottom: 0.39rem;*/
+    /*margin-bottom: 0.28rem;*/
+}
+
+.left p:nth-child(3),
+.left p:nth-child(4) {
+    /*margin-bottom: 0.28rem;*/
+}
+
+.left p:nth-child(5) {
+    /*margin-bottom: 0.28rem;*/
+}
+
+.right {
+    flex-shrink: 0;
+    /*width: 22%;*/
+    float: right;
+    /*background-color: green;*/
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    /*justify-content: space-between;*/
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+.num {
+    font-size: 0.34rem;
+    font-weight: 400;
+    color: #000000;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    word-break: break-all;
+
+    height: auto!important;
+    line-height: auto!important;
+}
+.namebox{
+    word-break: break-all;
+}
+.date {
+}
+
+.rtop {
+    float: right;
+    width: 1.5rem;
+    height: 2rem;
+    /*margin-bottom: 0.42rem;*/
+    /*margin-bottom: 1.3rem;*/
+    margin-bottom: 0.4rem;
+}
+
+.rtop img,
+.rbottom img {
+    width: 100%;
+    height: 100%;
+}
+
+.rbottom {
+    float: right;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.liuliu {
+    text-align: center;
+}
+
+.name {
+    /*margin-right: 0.88rem;*/
+}
+
+.lei {
+    margin-right: 0.88rem;
+}
+.signimg{
+    width:2.6rem;
+    /*position: absolute;*/
+    /*bottom: 0.2rem;*/
+    /*right: 0.1rem;*/
+    position: absolute;
+    bottom: 1.7rem;
+    right: 2.2rem;
+}
+.signimg_new{
+    width:2.6rem;
+    position: absolute;
+    bottom: 0.2rem;
+    right: 2.2rem;
+}
+/*20240418*/
+.left .uuyy{
+    /*background-color: pink;*/
+    display: flex;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+.left .uuyy .name{
+/*background-color: palegreen;*/
+    flex-shrink: 0;
+}
+.left .uuyy .namepp{
+    line-height: 1.1;
+    flex: 1;
+    /*background-color: palegreen;*/
+    flex-shrink: 0;
+}
+.left .danwei{
+    /*margin-bottom: 0;*/
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 0.2rem;
+}
+
+/*20240507*/
+body{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    /*align-items: center;*/
+    /*align-content: center;*/
+}
+.bottombox{
+    /*width: 100%;*/
+    flex-shrink: 0;
+    /*height: 1.84rem;*/
+    height: 2.6rem;
+    background: #FFFFFF;
+    /*background-color: pink;*/
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding-left: 0.99rem;
+    padding-right: 0.59rem;
+}
+.bottombox .condition {
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 0.32rem;*/
+    /*width: 25%;*/
+    height: 100%;
+    /*background-color: red;*/
+    margin-right: 0.45rem;
+}
+.bottombox .condition input {
+    display: none;
+}
+.bottombox .condition input + i {
+    display: inline-block;
+    background: url(../../imgs/wast/thenewwarn/check.png) center no-repeat;
+    background-size: 0.56rem 0.56rem;
+    width: 0.56rem;
+    height: 0.56rem;
+    margin-right: 0.22rem;
+    border-radius: 0.1rem;
+    border: 2px solid #333333;
+}
+.bottombox .condition input:checked + i {
+    background: url(../../imgs/wast/thenewwarn/right.png) center no-repeat;
+    background-size: 0.56rem 0.56rem;
+}
+.bottombox .condition label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 100%;
+    font-weight: bold;
+    font-size: 0.36rem;
+    color: #333333;
+}
+.bottombox .getsum{
+    flex-shrink: 0;
+    flex: 1;
+    font-weight: bold;
+    font-size: 0.36rem;
+}
+.bottombox .getsum span{
+ color: rgba(236, 150, 39, 1);
+}
+.bottombox .btnbox{
+    flex-shrink: 0;
+    width: 3.23rem;
+    height: 1.33rem;
+    line-height: 1.33rem;
+    /*background: #EC9627;*/
+    /*border-radius: 0.27rem;*/
+}
+.bottombox .btnbox button{
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 1.33rem;
+    background: #EC9627;
+    border-radius: 0.27rem;
+    font-weight: 800;
+    font-size: 0.4rem;
+    color: #FFFFFF;
+}
+.bottombox .btnbox button:hover{
+    opacity: 0.8;
+}
+#pagebox{
+    flex: 1;
+    flex-shrink: 0;
+    /*background-color: yellow;*/
+}
+#pagebox .condition {
+    position: absolute;
+    top: 0;
+    left: 0.32rem;
+    width: 25%;
+    height: 1rem;
+    line-height: 1rem;
+    z-index: 99;
+    /*background-color: red;*/
+}
+#pagebox .condition input {
+    display: none;
+}
+#pagebox .condition input + i {
+    display: inline-block;
+    background: url(../../imgs/wast/thenewwarn/check.png) center no-repeat;
+    background-size: 0.56rem 0.56rem;
+    width: 0.56rem;
+    height: 0.56rem;
+    margin-right: 0.22rem;
+    border-radius: 0.18rem;
+}
+#pagebox .condition input:checked + i {
+    background: url(../../imgs/wast/thenewwarn/right.png) center no-repeat;
+    background-size: 0.56rem 0.56rem;
+}
+#pagebox .condition label span {
+/*background-color: pink;*/
+    padding-top: 0.1rem;
+}
+#pagebox .condition label {
+    display: flex;
+    align-items: center;
+    /*align-items: center;*/
+    /*align-content: center;*/
+    cursor: pointer;
+    height: 100%;
+    font-weight: bold;
+    font-size: 0.34rem;
+    color: #FFFFFF;
+}
+.page__bd{
+    position: relative;
+    margin-bottom: 1rem;
+}
+.page__bd:nth-last-child(1){
+    margin-bottom: 1rem;
+}
+.btnbox{
+    flex-shrink: 0;
+    /*width: 3.23rem;*/
+    height: 1.33rem;
+    line-height: 1.33rem;
+    /*background: #EC9627;*/
+    /*border-radius: 0.27rem;*/
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+.btnbox .btnupload{
+    border: none;
+    outline: none;
+    /*width: 100%;*/
+    flex-shrink: 0;
+    flex: 1;
+    /*width: 2.93rem;*/
+    height: 1.33rem;
+    background: #EC9627;
+    border-radius: 0.13rem;
+    font-weight: 800;
+    font-size: 0.36rem;
+    color: #FFFFFF;
+}
+.btnbox .btnview{
+    flex-shrink: 0;
+    /*flex: 1;*/
+    border: none;
+    outline: none;
+    width: 6.06rem;
+    height: 1.33rem;
+    background: rgba(2, 103, 253, 1);
+    border-radius: 0.13rem;
+    font-weight: 800;
+    font-size: 0.36rem;
+    color: #FFFFFF;
+    margin-right: 0.27rem;
+}
+.btnbox button:hover{
+    opacity: 0.8;
+}
+.signimg2{
+    position: absolute;
+    left: 55%;
+    top: 13%;
+    width: 2.77rem;
+    height: 1.6rem;
+}
+
+.firstinfo{
+    width: 100%;
+    /*background-color: red;*/
+
+    margin-bottom: 0.2rem;
+    font-weight: 400;
+    color: #000000;
+
+}
+.firstinfo .namebox{
+    margin-bottom: 0;
+    font-size: 0.29rem;
+}
+.flexbox_spacebetween{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.flexbox_start{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+.flexbox_start p{
+    line-height: 0.36rem;
+}
+.flexbox_spacebetween .namebox:nth-child(1){
+/*background-color: pink;*/
+    flex-shrink: 0;
+    flex: 1;
+}
+.flexbox_start .namebox:nth-child(1){
+    /*background-color: pink;*/
+    flex-shrink: 0;
+    margin-right: 0.2rem;
+    width: 48%;
+}
+.flexbox_spacebetween .namebox:nth-last-child(1){
+    flex-shrink: 0;
+/*background-color: magenta;*/
+}
+.flexbox_start .lei{
+    margin-right: 0.5rem!important;
+}
+.flexbox_spacebetween .lei{
+    margin-right: 0.2rem!important;
+}
+.mb_3{
+    margin-bottom: 0.2rem!important;
+}
+
+.checkchoose input {
+    vertical-align: middle;
+    width: 0.34rem;
+    height: 0.34rem;
+}

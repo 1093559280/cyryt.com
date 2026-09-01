@@ -1,0 +1,783 @@
+
+//为了安全性考虑 先校验token token校验成功再上传  否则知道地址即可上传
+function getToken(username,password){
+    var auth_token = "";
+    jQuery.ajax({
+        method: "POST",
+        url: "/fileTokenCon/getToken",
+        data: {"username": username,"password":password},
+        async: false,//Ajax调用方式为异步。false:同步加载
+        cache: false,
+        success: function (data) {
+            auth_token = data;
+        }, error: function () {
+            auth_token = "";
+        }
+    });
+    return auth_token;
+}
+
+
+//单个文件上传
+//参数说明 upload_path:上传服务路径(后台获取)  token:安全校验(后台获取)
+//form_id：form表单id,sys_code:系统编号,file_path：选择文件路径(前台获取),file_folder:文件夹名称
+function fileUpload(upload_path,auth_token,form_id,sys_code,file_path,file_folder){
+    //获取最后一个.的位置
+    var index= file_path.lastIndexOf(".");
+    //获取后缀
+    var ext = file_path.substr(index+1);
+    //获取文件类型
+    var file_type = getFileType(ext);
+
+    //文件存储路径
+    var file_save_path = "";
+    //根据系统创建文件存储路径
+    if(sys_code === "01"){
+        file_save_path = "base/"+ file_type+"/";
+    }else if(sys_code == "02"){
+        file_save_path = "wast/"+ file_type+"/";
+    }else if(sys_code == "03"){
+        file_save_path = "radia/"+ file_type+"/";
+    }else if(sys_code == "04"){
+        file_save_path = "cosm/"+ file_type+"/";
+    }else if(sys_code == "05"){
+        file_save_path = "cdc/"+ file_type+"/";
+    }else if(sys_code == "06"){
+        file_save_path = "zys/"+ file_type+"/";
+    }else if(sys_code == "10"){
+        file_save_path = "inohradia/"+ file_type+"/";
+    }else if(sys_code == "11"){
+        file_save_path = "tableware/"+ file_type+"/";
+    }else if(sys_code == "12"){
+        file_save_path = "pretrige/"+ file_type+"/";
+    }else if(sys_code == "13"){
+        file_save_path = "occup/"+ file_type+"/";
+    }else if(sys_code == "14"){
+        file_save_path = "eaoh/"+ file_type+"/";
+    }else if(sys_code == "15"){
+        file_save_path = "water/"+ file_type+"/";
+    }else if(sys_code == "16"){
+        file_save_path = "earch/"+ file_type+"/";
+    }else if(sys_code == "20"){
+        file_save_path = "dri/"+ file_type+"/";
+    }else if(sys_code == "27"){
+        file_save_path = "ster/"+ file_type+"/";
+    }else{
+        file_save_path = "test/"+ file_type+"/";
+    }
+
+   /* var myDate = new Date();
+    var tYear = myDate.getFullYear();
+    var tMonth = myDate.getMonth()+1;
+    if (tMonth.toString().length == 1) {
+        tMonth = "0" + tMonth;
+    }
+    var tDate = myDate.getDate();
+
+    file_save_path = file_save_path + tYear + tMonth + tDate;*/
+    file_save_path = file_save_path + file_folder;
+
+    var file_name = "";
+    if(sys_code == "02"){
+        var times = getRecentDay(0).replaceAll("-","").replaceAll(":","").replaceAll(" ","");
+        file_name = file_path.substr(0,index)+"_"+times+"."+ext;
+    }else{
+        file_name = randomString(32)+"."+ext;
+    }
+    var all_upload_path = upload_path + "?path="+file_save_path+"&filename="+file_name+"&auth_token="+auth_token+"&output=json";
+
+    var upload_file_path = "";
+    var upload_file_md5= "";
+
+    if(file_path.indexOf("\\") != -1){
+        $("#"+form_id).ajaxSubmit({
+            type: "POST",
+            url:all_upload_path,
+            async:false,
+            cache: false,
+            success : function(data) {
+                console.log(data);
+                var json = eval("("+data+")");
+                upload_file_path = json.path;
+                upload_file_md5 = json.md5;
+            },error:function(){
+                upload_file_path = "上传失败！";
+            }
+        });
+    }else{
+        var formSatellite = document.getElementById(form_id);//获取所要提交form的id
+        var fd = new FormData(formSatellite);
+        $.ajax({
+            type: "POST",
+            url: all_upload_path,
+            data: fd,
+            async : false,
+            contentType: false,   //jax 中 contentType 设置为 false 是为了避免 JQuery 对其操作，从而失去分界符，而使服务器不能正常解析文件
+            processData: false,   //当设置为true的时候,jquery ajax 提交的时候不会序列化 data，而是直接使用data
+            success : function(data) {
+                console.log(data);
+                var json = eval("("+data+")");
+                upload_file_path = json.path;
+                upload_file_md5 = json.md5;
+            },error:function(){
+                upload_file_path = "上传失败！";
+            }
+        });
+    }
+    return upload_file_path+"$"+upload_file_md5;
+}
+
+//单个文件上传 wangEditor使用
+//参数说明 upload_path:上传服务路径(后台获取)  token:安全校验(后台获取)
+//file：上传文件,sys_code:系统编号,file_path：选择文件路径(前台获取),file_folder:文件夹名称
+//insertFn wangEditor 回调方法
+function wangEditorFileUpload(upload_path,file_server,auth_token,sys_code,file_path,file_folder,file,insertFn){
+    //获取最后一个.的位置
+    let index= file_path.lastIndexOf(".");
+    //获取后缀
+    let ext = file_path.substr(index+1);
+    //获取文件类型
+    let file_type = getFileType(ext);
+
+    //文件存储路径
+    let file_save_path = "";
+
+    let pack_name="";
+    //根据系统创建文件存储路径
+    switch (sys_code){
+        case "01":
+            pack_name = "base/";
+            break;
+        case "02":
+            pack_name = "wast/";
+            break;
+        case "03":
+            pack_name = "radia/";
+            break;
+        case "04":
+            pack_name = "cosm/";
+            break;
+        case "05":
+            pack_name = "cdc/";
+            break;
+        case "06":
+            pack_name = "zys/";
+            break;
+        case "10":
+            pack_name = "inohradia/";
+            break;
+        case "11":
+            pack_name = "tableware/";
+            break;
+        case "12":
+            pack_name = "pretrige/";
+            break;
+        case "13":
+            pack_name = "occup/";
+            break;
+        case "14":
+            pack_name = "eaoh/";
+            break;
+        case "15":
+            pack_name = "water/";
+            break;
+        case "16":
+            pack_name = "earch/";
+            break;
+        case "20":
+            pack_name = "dri/";
+            break;
+        case "27":
+            pack_name = "ster/";
+            break;
+        default:
+            pack_name = "test/";
+            break;
+    }
+
+    file_save_path = pack_name + file_type+"/";
+
+    /* var myDate = new Date();
+     var tYear = myDate.getFullYear();
+     var tMonth = myDate.getMonth()+1;
+     if (tMonth.toString().length == 1) {
+         tMonth = "0" + tMonth;
+     }
+     var tDate = myDate.getDate();
+
+     file_save_path = file_save_path + tYear + tMonth + tDate;*/
+    file_save_path = file_save_path + file_folder;
+
+    var file_name = "";
+    if(sys_code === "02"){
+        var times = getRecentDay(0).replaceAll("-","").replaceAll(":","").replaceAll(" ","");
+        file_name = file_path.substr(0,index)+"_"+times+"."+ext;
+    }else{
+        file_name = randomString(32)+"."+ext;
+    }
+    let all_upload_path = upload_path + "?path="+file_save_path+"&filename="+file_name+"&auth_token="+auth_token+"&output=json";
+
+    // let formData = new FormData(file);
+    let formData = new FormData();
+    formData.append('file', file);
+    try {
+        $.ajax({
+            type: "POST",
+            url: all_upload_path,
+            data: formData,
+            async: false,
+            contentType: false,   //jax 中 contentType 设置为 false 是为了避免 JQuery 对其操作，从而失去分界符，而使服务器不能正常解析文件
+            processData: false,   //当设置为true的时候,jquery ajax 提交的时候不会序列化 data，而是直接使用data
+            success: function (data) {
+                let json = eval("("+data+")");
+                let upload_file_path = json.path;
+                let file_path=file_server+upload_file_path+"?download=0&auth_token=";
+                // 插入图片到编辑器
+                insertFn(file_path, '图片', file_path)
+            }, error: function () {
+                alert('图片上传失败，请重试')
+            }
+        });
+    } catch (e) {
+        throw new Error('上传失败')
+    }
+}
+
+
+//单个文件上传
+//参数说明 base64_file:base64格式图片  token:安全校验(后台获取)
+//sys_code:系统编号,file_folder:文件夹名称
+function base64fileUpload(base64_file,auth_token,sys_code,file_folder){
+    var upload_file_path = "";
+    var upload_file_md5= "";
+    jQuery.ajax({
+        type: "POST",
+        url:"/fileUploadCon/uploadBase64",
+        data:{"base64": base64_file,"auth_token":auth_token,"sys_code":sys_code,"file_folder":file_folder},
+        async:false,
+        cache: false,
+        success : function(data){
+            console.log(data);
+            var json = eval("("+data+")");
+            upload_file_path = json.path;
+            upload_file_md5 = json.md5;
+        },error:function(){
+            upload_file_path = "上传失败！";
+        }
+    });
+
+    return upload_file_path+"$"+upload_file_md5;
+}
+
+//2023.02.15  gxy  base64文件上传直接上传到go-fast服务
+//原理：base64位文件转Blob类型，FormData上传二进制文件
+//参数说明 upload_path:上传服务路径(后台获取)  token:安全校验(后台获取)
+//sys_code:系统编号,base64：文件base64,file_folder:文件夹名称,ext:文件后缀(例：pdf)
+function base64Upload(upload_path,auth_token,sys_code,base64,file_folder,ext){
+    //获取文件类型
+    var file_type = getFileType(ext);
+    //文件存储路径
+    var file_save_path = "";
+    //根据系统创建文件存储路径
+    if(sys_code == "02"){
+        file_save_path = "wast/"+ file_type+"/";
+    }else if(sys_code == "03"){
+        file_save_path = "radia/"+ file_type+"/";
+    }else if(sys_code == "04"){
+        file_save_path = "cosm/"+ file_type+"/";
+    }else if(sys_code == "05"){
+        file_save_path = "cdc/"+ file_type+"/";
+    }else if(sys_code == "06"){
+        file_save_path = "zys/"+ file_type+"/";
+    }else if(sys_code == "10"){
+        file_save_path = "inohradia/"+ file_type+"/";
+    }else if(sys_code == "11"){
+        file_save_path = "tableware/"+ file_type+"/";
+    }else if(sys_code == "12"){
+        file_save_path = "pretrige/"+ file_type+"/";
+    }else if(sys_code == "13"){
+        file_save_path = "occup/"+ file_type+"/";
+    }else if(sys_code == "14"){
+        file_save_path = "eaoh/"+ file_type+"/";
+    }else if(sys_code == "15"){
+        file_save_path = "water/"+ file_type+"/";
+    }else if(sys_code == "16"){
+        file_save_path = "earch/"+ file_type+"/";
+    }else if(sys_code == "27"){
+        file_save_path = "ster/"+ file_type+"/";
+    }else{
+        file_save_path = "test/"+ file_type+"/";
+    }
+
+    file_save_path = file_save_path + file_folder;
+    var file_name = randomString(32)+"."+ext;
+
+    var all_upload_path = upload_path + "?path="+file_save_path+"&filename="+file_name+"&auth_token="+auth_token+"&output=json";
+
+    var upload_file_path = "";
+    var upload_file_md5= "";
+
+    var blob = dataURLtoBlob(base64);
+    var formdata = new FormData();  // new一个formdata对象
+    formdata.append('id', 'test'); // formdata对象新增一个key值，value为'test'
+    formdata.append('file', blob,file_name); // key值, 二进制类型文件,文件名
+
+    jQuery.ajax({
+        type: "POST",
+        url: all_upload_path,
+        data: formdata,
+        async : false,
+        contentType: false,   //jax 中 contentType 设置为 false 是为了避免 JQuery 对其操作，从而失去分界符，而使服务器不能正常解析文件
+        processData: false,   //当设置为true的时候,jquery ajax 提交的时候不会序列化 data，而是直接使用data
+        success : function(data) {
+            console.log(data);
+            var json = eval("("+data+")");
+            upload_file_path = json.path;
+            upload_file_md5 = json.md5;
+        },error:function(){
+            upload_file_path = "上传失败！";
+        }
+    });
+    return upload_file_path+"$"+upload_file_md5;
+}
+
+//将base64转换为blob
+function dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+}
+
+//文件下载
+//参数说明 file_server：服务路径 auth_token：安全认证码  file_path：数据库存在文件上传后的半路径
+function fileDowload(file_server,auth_token,file_path){
+    var url = file_server + file_path+"?auth_token="+auth_token;
+    var file_name = file_path.substring(file_path.lastIndexOf("/")+1,file_path.length);
+    //1.创建对象
+    var xhr=new XMLHttpRequest();
+    //2.指定服务器地址
+    xhr.open('GET',url,true);
+    xhr.responseType = 'blob';
+    xhr.onload = function() {
+        if(xhr.status ===200){
+            var blob = this.response;
+            var href = window.URL.createObjectURL(blob); //创建下载的链接
+            //判断是否是IE浏览器，是的话返回true
+            if (window.navigator.msSaveBlob) {
+                try {
+                    window.navigator.msSaveBlob(blob, file_name);
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                // 谷歌浏览器 创建a标签 添加download属性下载
+                var downloadElement = document.createElement('a');
+                downloadElement.href = href;
+                downloadElement.target = '_blank';
+                downloadElement.download = file_name; //下载后文件名
+                document.body.appendChild(downloadElement);
+                downloadElement.click(); //点击下载
+                document.body.removeChild(downloadElement); //下载完成移除元素
+                window.URL.revokeObjectURL(href); //释放掉blob对象
+            }
+        }
+    }
+    xhr.onerror = function (error) {
+        console.log(error);
+    }
+    //3.发送
+    xhr.send();
+}
+
+//文件删除
+//参数说明 delete_path：文件删除路径  auth_token：安全认证码   md5：图片MD5值
+function fileDelete(delete_path,auth_token,md5){
+    var status = "";
+    var url = delete_path+"?md5="+md5+"&auth_token="+auth_token;
+    $.ajax({
+        type: "POST",
+        url: url,
+        async : false,
+        contentType: false,   //jax 中 contentType 设置为 false 是为了避免 JQuery 对其操作，从而失去分界符，而使服务器不能正常解析文件
+        processData: false,   //当设置为true的时候,jquery ajax 提交的时候不会序列化 data，而是直接使用data
+        success : function(data) {
+            if(data.indexOf("{") != -1){
+                var json = eval("("+data+")");
+                status = json.status;
+            }
+            console.log(data);
+        },error:function(){
+        }
+    });
+    return status;
+}
+
+//文件查看
+//参数说明 preview_server：预览服务路径  file_server：文件服务路径 auth_token：安全校验 file_path：文件路径
+function filePreview(preview_server,file_server,auth_token,file_path){
+    var file_array = file_path.split("|");
+    var file_len = file_array.length;
+    if(file_len == 1){
+        var url = file_server+file_array[0]+"?download=0&auth_token="+auth_token;
+        var open_url = preview_server+"onlinePreview?url="+encodeURIComponent(Base64.encode(url));
+        var newWin = window.open('','_blank');
+        newWin.document.write('<body scroll="no" style="margin: 0px;padding: 0px;border:0px;overflow:hidden;"><iframe style="margin: 0px;padding: 0px;border: 0px;width:100%;height:100%" src="'+open_url+'"></iframe></body>');
+        newWin.document.title = "文件预览";
+    }else if(file_len>1){
+        var fileUrl= "";
+        for(var i = 0;i< file_len; i++ ){
+            var url = file_server+file_array[i]+"?download=0&auth_token="+auth_token;
+            fileUrl += url + "|";
+        }
+
+        fileUrl = fileUrl.substring(0,fileUrl.length-1);//多文件使用“|”字符隔开
+        var open_url = preview_server+"picturesPreview?urls="+encodeURIComponent(Base64.encode(fileUrl));
+        var newWin = window.open('','_blank');
+        newWin.document.write('<body scroll="no" style="margin: 0px;padding: 0px;border:0px;overflow:hidden;"><iframe style="margin: 0px;padding: 0px;border: 0px;width:100%;height:100%" src="'+open_url+'"></iframe></body>');
+        newWin.document.title = "文件预览";
+    }
+}
+
+
+function getBlodUrl(url){
+    var blod_arry = [];
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET",url,true);
+    xhr.responseType = 'blob';
+    xhr.onload = function() {
+        if(xhr.status ===200){
+            var blob = this.response;
+            var blod_url = window.URL.createObjectURL(blob); //创建下载的链接
+            blod_arry.push(blod_url);
+        }
+    }
+    xhr.onerror = function (error) {
+        console.log(error)
+    }
+    //3.发送
+    xhr.send();
+    return blod_url;
+}
+
+//多文件上传
+//参数说明 more_upload_path:上传服务路径(后台获取)  token:安全校验(后台获取)
+//div_id：上传框div的id,sys_code:系统编号
+//file_type:文件类型 用于选择文件的过滤和上传路径的判断
+//            |
+// 图片：image 视频：video 音频：audio 文本文件：txt Excel文件：xls/xlsx  word文档：doc/docx  pdf文档：pdf  其他：other
+var uppy,file_path="";
+function initUppy(more_upload_path,div_id,file_type) {
+    //判断文件过滤类型
+    var allowedFileTypes = [];
+    if (file_type == "image") {
+        allowedFileTypes.push("image/*");
+        file_path = "image";
+    } else if (file_type == "video") {
+        allowedFileTypes.push("video/*");
+        file_path = "video";
+    } else if (file_type == "audio") {
+        allowedFileTypes.push("audio/*");
+        file_path = "video";
+    } else if (file_type == "txt") {
+        allowedFileTypes.push("text/plain");
+        file_path = "document";
+    } else if (file_type == "xls/xlsx") {
+        allowedFileTypes.push("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        allowedFileTypes.push("application/vnd.ms-excel");
+        file_path = "document";
+    } else if (file_type == "doc/docx") {
+        allowedFileTypes.push("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        file_path = "document";
+    } else if (file_type == "pdf") {
+        allowedFileTypes.push("application/pdf");
+        file_path = "document";
+    } else if (file_type == "other") {
+        allowedFileTypes.push("");
+        file_path = "document";
+    }
+    //alert(file_path);
+    uppy = new Uppy.Core({
+        debug: true,
+        autoProceed: false,
+        locale: Uppy.locales.zh_CN,
+        allowMultipleUploads: true, // 上传完成之后，是否可继续添加文件上传
+        restrictions: {
+            maxFileSize: 1024 * 1024 * 1024 * 4, // 以字节为单位
+            maxNumberOfFiles: 100,//最大文件数
+            minNumberOfFiles: 1,//最小文件数
+            allowedFileTypes: allowedFileTypes,
+            //requiredMetaFields: ['caption'],
+        }
+    }).use(Uppy.Dashboard, {
+        inline: true,
+        target: '#' + div_id,
+        hideUploadButton: true,//隐藏自带的上传按钮
+        metaFields: [
+            { id: 'name', name: 'Name', placeholder: 'file name' },
+            { id: 'caption', name: 'Caption', placeholder: 'describe what the image is about' }
+        ],
+        showProgressDetails: true,
+        note: 'Images and video only, 2–3 files, up to 1 MB',
+        height: 470,
+        browserBackButtonClose: false
+    }).use(Uppy.Tus, {
+        endpoint: more_upload_path
+    });
+}
+
+function moreFileUpload(sys_code,auth_token){
+    //文件存储路径
+    var file_save_path = "";
+    //根据系统创建文件存储路径
+    if(sys_code == "02"){
+        file_save_path = "wast/"+ file_path+"/";
+    }else if(sys_code == "03"){
+        file_save_path = "radia/"+ file_path+"/";
+    }else if(sys_code == "04"){
+        file_save_path = "cosm/"+ file_path+"/";
+    }else if(sys_code == "05"){
+        file_save_path = "cdc/"+ file_path+"/";
+    }else if(sys_code == "06"){
+        file_save_path = "zys/"+ file_path+"/";
+    }else if(sys_code == "10"){
+        file_save_path = "inohradia/"+ file_path+"/";
+    }else if(sys_code == "11"){
+        file_save_path = "tableware/"+ file_path+"/";
+    }else if(sys_code == "12"){
+        file_save_path = "pretrige/"+ file_path+"/";
+    }else if(sys_code == "13"){
+        file_save_path = "occup/"+ file_path+"/";
+    }else if(sys_code == "14"){
+        file_save_path = "eaoh/"+ file_type+"/";
+    }else if(sys_code == "15"){
+        file_save_path = "water/"+ file_type+"/";
+    }else if(sys_code == "16"){
+        file_save_path = "earch/"+ file_type+"/";
+    }else if(sys_code == "27"){
+        file_save_path = "ster/"+ file_type+"/";
+    }
+    //alert(file_save_path);
+    var myDate = new Date();
+    var tYear = myDate.getFullYear();
+    var tMonth = myDate.getMonth()+1;
+    if (tMonth.toString().length == 1) {
+        tMonth = "0" + tMonth;
+    }
+    var tDate = myDate.getDate();
+
+    file_save_path = file_save_path + tYear + tMonth + tDate;
+    //alert(file_save_path);
+    uppy.setMeta({ auth_token: '9ee60e59-cb0f-4578-aaba-29b9fc2919ca', callback_url: 'http://127.0.0.1/callback',path:file_save_path,auth_token:auth_token }); //自定义参数与普通上传类似（虽然支持自定义，建议不要自定义，海量文件情况下，自定义很可能给自已给埋坑）
+
+    uppy.upload();
+
+    var upload_file_path = [];
+    uppy.on('complete', function (result) {
+        console.info(result.successful);
+        var file_count = result.successful.length;
+        for(var i = 0;i < file_count;i++) {
+            var uploadURL = result.successful[i].uploadURL;
+            var md5 = uploadURL.substring(uploadURL.lastIndexOf("/") + 1, uploadURL.length);
+            var file_path = urlChange(md5);
+            upload_file_path.push(file_path);
+        }
+        //alert(upload_file_path.toString());
+        //return upload_file_path.toString();
+    });
+
+}
+
+//断点续传，上传后一定要用文件id置换成path存储 路径转换
+function urlChange(md5) {
+    var file_path = "";
+    jQuery.ajax({
+        method: "GET",
+        url: "http://192.168.1.222:8080/group1/upload?md5="+md5+"&output=json",
+        async: false,//Ajax调用方式为异步。false:同步加载
+        cache: false,
+        success: function (data) {
+            var json = eval("("+data+")");
+            file_path = json.path.replace("//","/");
+        }, error: function () {
+            return "系统错误，请稍后重试";
+        }
+    });
+    return file_path;
+
+    /*var xhr = new XMLHttpRequest();
+    xhr.open("get","http://192.168.1.222:8080/group1/upload?md5="+md5+"&output=json");
+    xhr.send();
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4 && xhr.status ===200){
+            var json = eval("("+xhr.responseText+")");
+            var file_path = json.path + "?download=0";
+            alert(file_path);
+            console.log(xhr.responseText);
+        }
+    }
+    xhr.onerror = function (error) {
+        console.log(error)
+    }*/
+}
+
+//获取图片类型
+function getFileType(ext) {
+    // 创建图片类型数组
+    var img = ["bmp", "jpg", "jpeg", "png", "tiff", "gif", "pcx", "tga", "exif", "fpx", "svg", "psd",
+        "cdr", "pcd", "dxf", "ufo", "eps", "ai", "raw", "wmf" ];
+    if(img.indexOf(ext.toLowerCase()) != -1){
+        return "image";
+    }
+
+    // 创建文档类型数组
+    var document = [ "txt", "doc", "docx", "xls","xlsx", "htm", "html", "jsp", "rtf", "wpd", "pdf", "ppt" ];
+    if(document.indexOf(ext.toLowerCase()) != -1){
+        return "document";
+    }
+    // 创建视频类型数组
+    var video = [ "mp4", "avi", "mov", "wmv", "asf", "navi", "3gp", "mkv", "f4v", "rmvb", "webm" ];
+    if(video.indexOf(ext.toLowerCase()) != -1){
+        return "video";
+    }
+    // 创建音乐类型数组
+    var music = [ "mp3", "wma", "wav", "mod", "ra", "cd", "md", "asf", "aac", "vqf", "ape", "mid", "ogg",
+        "m4a", "vqf" ];
+    if(music.indexOf(ext.toLowerCase()) != -1){
+        return "music";
+    }
+}
+
+//获取随机数 len：获取的位数
+function randomString(len) {
+    len = len || 32;
+    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+    var maxPos = $chars.length;
+    var pwd = '';
+    for (i = 0; i < len; i++) {
+        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+}
+
+
+//文件大小限制
+function checkfilesize(dom,sizes){
+    var filePath = dom.value;
+    var maxsize = parseInt(sizes)*1024*1024;//2M
+    var errMsg = "上传失败：文件大小不能超过2M！";
+    var tipMsg = "您的浏览器暂不支持计算上传文件的大小，建议使用IE、FireFox、Chrome浏览器。";
+    var browserCfg = validBrowser();  //获取浏览器类型
+
+    try{
+        if(filePath == ""){
+            return;
+        }
+        var filesize = 0;
+        if(browserCfg.isFirefox || browserCfg.isChrome ){
+            filesize = dom.files[0].size;
+        }else if(browserCfg.isIE){
+            var fileSystem = new ActiveXObject("Scripting.FileSystemObject");
+            var file = fileSystem.GetFile (filePath);
+            filesize = file.Size;
+        }else{
+            //alert(tipMsg);
+            clearInputFile(dom);
+            return;
+        }
+        if(filesize == -1){
+            //alert(tipMsg);
+            clearInputFile(dom);
+            return;
+        }else if(filesize > maxsize){
+           // alert(errMsg);
+            clearInputFile(dom);
+            return false;
+        }else{
+            return;
+        }
+    }catch(e){
+        //alert(e);
+    }
+}
+//超过大小，取消上传，input值清空
+function clearInputFile(dom){
+    if(dom.value){
+        try{
+            dom.value = ''; //for IE11, latest Chrome/Firefox/Opera...
+        }catch(err){
+        }
+        if(dom.value){ //for IE5 ~ IE10
+            var form = document.createElement('form'), ref = dom.nextSibling, p = dom.parentNode;
+            form.appendChild(dom);
+            form.reset();
+            p.insertBefore(dom,ref);
+        }
+    }
+}
+//获取浏览器类型
+function validBrowser(){
+    var browserCfg = {};
+    var u_agent = navigator.userAgent;
+    browserCfg.name = 'Failed to identify the browser';
+    if(u_agent.indexOf('Firefox') > -1){
+        browserCfg.name = 'Firefox';
+        browserCfg.isFirefox = true;
+    }else if(u_agent.indexOf('Chrome') > -1){
+        browserCfg.name = 'Chrome';
+        browserCfg.isChrome = true;
+    }else if(u_agent.indexOf('Trident') > -1 && u_agent.indexOf('rv:11') > -1){
+        browserCfg.name = 'IE11';
+        browserCfg.isIE = true;
+    }else if(u_agent.indexOf('MSIE') > -1 && u_agent.indexOf('Trident') > -1){
+        browserCfg.name = 'IE(8-10)';
+        browserCfg.isIE = true;
+    }else if(u_agent.indexOf('MSIE') > -1){
+        browserCfg.name = 'IE(6-7)';
+        browserCfg.isIE = true;
+    }else if(u_agent.indexOf('Opera') > -1){
+        browserCfg.name = 'Opera';
+    }else{
+        browserCfg.name += ',info:' + u_agent;
+    }
+    return browserCfg;
+}
+
+//清空文件队列
+function clearFile(UPLOAD_FILES){
+    for (var x in UPLOAD_FILES) {
+        delete UPLOAD_FILES[x];
+    }
+}
+
+//将网络图片转为base64格式
+function convertImageToBase64(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'blob';
+    xhr.onload = function() {
+        if (this.status === 200) {
+            var blob = this.response;
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                callback(reader.result);
+            };
+            reader.readAsDataURL(blob);
+        }
+    };
+    xhr.send();
+}
+
+
+//获取base64文件的大小
+function getBase64ImageSizeInKB(base64) {
+    var str = atob(base64.split(',')[1]);
+    var bytes = str.length;
+    var sizeInKB = (bytes / 1024).toFixed(2);
+    return sizeInKB;
+}

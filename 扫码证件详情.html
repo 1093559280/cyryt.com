@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<!-- saved from url=(0081)https://web.cyrytj.com/wsc/cin?b=49226546e1707ae8d4fd2a1a2fc4812983f65f3e13a83ba1 -->
+<html style="font-size: 141.481px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./扫码证件详情_files/weui.css">
+    <link rel="stylesheet" href="./扫码证件详情_files/weui.min.css">
+    <link rel="stylesheet" media="screen" href="./扫码证件详情_files/mycard.css">
+    <script src="./扫码证件详情_files/jweixin-1.2.0.js.下载"></script>
+    <script src="./扫码证件详情_files/html2canvas.js.下载"></script>
+    <script src="./扫码证件详情_files/fileupload.js.下载"></script>
+    <script src="./扫码证件详情_files/noweixinzitidaxiao.js.下载"></script>
+    <title>扫码证件详情</title>
+    <style>
+        .weui-icon-search {
+            position: absolute;
+            top: 50%;
+            right: 0.08rem;
+            margin-top: -0.24rem;
+            padding: 8px;
+            width: 0.4rem!important;
+            height: 0.4rem!important;
+        }
+
+        .weui-search-bar__box .weui-search-bar__input {
+            padding: 8px 0;
+            width: 100%;
+            height: 1.14285714em;
+            border: 0;
+            font-size: 0.38rem;
+            font-weight: 400;
+            font-family: "SourceHanSansCN-Regular";
+            line-height: 1.14285714em;
+            box-sizing: content-box;
+            background: transparent;
+            caret-color: #07c160;
+            caret-color: var(--weui-BRAND);
+            color: rgba(0, 0, 0, .9);
+            color: var(--weui-FG-0);
+        }
+        .not {
+            margin-top: 1rem!important;
+            color: #000000;
+            text-align: center;
+            font-size: 0.38rem!important;
+            font-family: 'SourceHanSansCN-Regular';
+            font-weight: 500!important;
+        }
+        .flexbox {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .flexbox .danwei_1 {
+            flex-shrink: 0;
+        }
+
+        .flexbox .danwei_2 {
+            flex-shrink: 0;
+            flex: 1;
+        }
+
+        .checkchoose {
+            margin-bottom: 0.15rem;
+            display: inline-block;
+        }
+
+        .checkchoose input {
+            vertical-align: middle;
+        }
+        .mycardpanel .container{
+            padding: 0.4rem 0.32rem;
+        }
+        .conditions input {
+            display: none;
+        }
+        .conditions input + i {
+            display: inline-block;
+            background: url(/wechat/imgs/cdc/rangecheck.png) center no-repeat;
+            background-size: 100% 100%;
+            width: 0.32rem;
+            height: 0.32rem;
+            margin-right: 0.04rem;
+        }
+        .conditions input:checked + i {
+            background: url(/wechat/imgs/cdc/rangechecked.png) center no-repeat;
+            background-size: 100% 100%;
+        }
+    </style>
+    <script type="text/javascript">
+        (function(doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function() {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 10 * (clientWidth / 108) + 'px';
+                    console.log(docEl.style.fontSize);
+                };
+
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+</head>
+
+<body>
+<div class="page" id="pagebox">
+    <div class="page__bd">
+        <article class="weui-article">
+            <div id="card_info">
+                
+                    <div class="page__bd">
+                            <div class="mycardpanel" id="410711100002026B003852">
+                                
+                                
+                                    <div class="top">
+                                        从业人员健康证明</div>
+                                
+                                <div class="container clearfix">
+                                
+
+                                <div class="left" id="leftcard" style="position: relative;">
+
+
+                                    
+                                        <div class="firstinfo flexbox_start">
+                                            <p class="namebox uuyy"><span class="name">姓    名：</span><span class="namepp">刘欢欢</span></p>
+                                            <p class="namebox"><span class="lei">性别：男</span><span class="age">年龄：34</span></p>
+
+                                        </div>
+                                    
+                                    
+                                        <p class="danwei"><span class="danwei_1">身份证号：</span><span class="danwei_2">410711**********52</span>
+                                        </p>
+                                    
+                                    
+                                        <p class="danwei"><span class="danwei_1">从业类型：</span><span class="danwei_2">B&nbsp;&nbsp;公共场所、饮用水</span>
+                                        </p>
+                                    
+                                    
+                                    
+                                    
+                                        
+                                    
+                                    
+                                    
+                                        <p class="danwei"><span class="danwei_1">编    号：</span><span class="danwei_2">410711100002026B003852</span></p>
+                                    
+                                    
+
+                                    <p class="danwei"><span class="danwei_1">发证机构：</span>
+                                        
+                                            <span class="danwei_2">新乡和平医院</span>
+                                        
+                                        
+                                    </p>
+                                    
+                                    
+                                        <p class="danwei" style="margin-bottom: 0rem;"><span class="danwei_1">发证时间：</span><span class="danwei_2">2026-04-21（有效期：1年）</span></p>
+                                    
+
+
+                                    
+
+                                    
+                                </div>
+                                    <img id="unitimg" class="signimg_new" style="" src="./扫码证件详情_files/sealpath_e5f475ff5dbb45878cb99613eaabdf90.jpg" alt="">
+                                <div class="right">
+                                    <div class="rtop">
+                                        <img src="./扫码证件详情_files/headimage_202604161046533157af787110dd1.jpg" alt="">
+                                       
+                                    </div>
+                                    <div class="rbottom">
+                                        <img src="./扫码证件详情_files/qrcode_86a05eb9bf4a4f229034dab71f4e1ad6.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<!--失败弹框-->
+<div id="false_toast" style="display: none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-warn weui-icon_toast" onclick="closeFalse_toast()"></i>
+        <p class="weui-toast__content" id="false_contents"></p>
+    </div>
+</div>
+<script src="./扫码证件详情_files/jquery-3.7.1.min.js.下载"></script>
+<script src="./扫码证件详情_files/weui.js.下载"></script>
+
+<script>
+    var cardInfo="[{vocation_code=B, exam_bill_code=410711100002026B003852, exam_bill_date=2026-04-16, qrcode=http://zxjcimg.wsxzsp.com/qrcode_86a05eb9bf4a4f229034dab71f4e1ad6.jpg, issued_unit=1, emp_person_sex=男, exam_unitname=新乡和平医院, areacode=410711000000, card_num=410711100002026B003852, card_no=410711100002026B003852, emp_unit_name=河师大, cert_end_date=2027-04-20, eid_num_type=2, if_print=1, print_time=2026-04-21 10:12:14, id=11467859, back_img=, is_pass=, check_unitname=新乡和平医院, emp_person_name=刘欢欢, print_man=51cbeef103294b5ea5b6a2d2c5bbcbd9, emp_person_birth=1980-10-27, create_time=2026-04-21 09:12:09, exam_area_code=410711000000, seal_path=http://img1.cyrytj.com/sealpath_e5f475ff5dbb45878cb99613eaabdf90.jpg, check_unituuid=c9ffa9e8d42f4d27be74a19e31951e58, emp_person_headpath=http://zxjcimg.wsxzsp.com/headimage_202604161046533157af787110dd1.jpg, record_id=, exam_score=, emp_person_age=45, create_man=51cbeef103294b5ea5b6a2d2c5bbcbd9, emp_unit_vocation=公共场所、饮用水, exam_unituuid=c9ffa9e8d42f4d27be74a19e31951e58, emp_person_idcard=410121198010277012, emp_person_jobtype=服务, cert_beg_date=2026-04-21}]";
+    console.log('cardInfo', cardInfo)
+    var auth_token = getToken("xnzh","95b9e95a6e8097bd");
+    if(cardInfo=='' || cardInfo=='[]'|| cardInfo==null){
+        var content="<p class='not'>暂未获取到证件！</p>";
+        $("#card_info").html(content);
+    }
+
+    //下载
+    function getAll(id){
+        var element = document.getElementById(id);
+        html2canvas(element, {
+            useCORS: true,// 开启跨域配置
+            height: element.scrollHeight,//canvas高
+            width: element.scrollWidth,//canvas宽
+        }).then(function (canvas ) {
+
+            var img = new Image();
+            img.src = canvas.toDataURL('image/png'); // 将 canvas 转换成 DataURL
+
+            // 在新标签页中显示图片
+            window.document.write('<img src="' + img.src + '" style="width:'+element.scrollWidth+';"  alt="Canvas Image"/>');
+
+            /*var url = canvas.toDataURL(1);
+            var file2 = dataURLtoFile(url, id+".png")
+            var formData = new FormData();
+
+            formData.append('file', file2);
+            formData.append("auth_token", auth_token);
+            formData.append("exam_bill_code", id);
+
+            $.ajax({
+                type:"POST",
+                data:formData,
+                async:false,
+                cache: false,
+                contentType:false,
+                processData:false,
+                url:"/appWechatBillController/uploadByMultipartFile",
+                success : function(data){
+                    if(data !=''){
+                        window.open(data)
+                    }else {
+                        $("#false_contents").html("下载失败！");
+                        $("#false_toast").show();
+                        setTimeout(function () {
+                            $('#false_toast').hide();
+                        }, 2000);
+                        return false;
+                    }
+
+                },error:function(){
+                    $("#false_contents").html("下载失败！");
+                    $("#false_toast").show();
+                    setTimeout(function () {
+                        $('#false_toast').hide();
+                    }, 2000);
+                    return false;
+                }
+            });*/
+        });
+    }
+    //将base64格式图片转为文件流格式
+    function dataURLtoFile(dataURL, filename) {
+        var arr = dataURL.split(',')
+        var mime = arr[0].match(/:(.*?);/)[1]
+        var bstr = atob(arr[1])
+        var n = bstr.length
+        var u8arr = new Uint8Array(n)
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n)
+        }
+        return new File([u8arr], filename, { type: mime })
+    }
+    //考试记录
+    function getExamRecord(record_id) {
+        if(record_id != '' && record_id !=undefined){
+            window.location.href = "/wxEmpExamCon/empRecordTitlePage?record_id=" + record_id;
+        }else {
+            $("#false_contents").html("您未参与考试！");
+            $("#false_toast").show();
+            setTimeout(function () {
+                $('#false_toast').hide();
+            }, 2000);
+        }
+    }
+</script>
+
+
+</body></html>
